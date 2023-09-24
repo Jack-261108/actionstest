@@ -34,15 +34,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <imageName>Jack:${project.artifactId}</imageName>
-                    <dockerDirectory>src</dockerDirectory>
-                </configuration>
-            </plugin>
         </plugins>
+        <finalName>springboot-images-new</finalName>
     </build>
 </project>

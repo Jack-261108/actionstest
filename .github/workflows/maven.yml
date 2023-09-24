@@ -18,15 +18,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn clean install  # Assumes Maven is used for the build
-     
+      - uses: actions/checkout@master
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn clean install  # Assumes Maven is used for the build
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: jack261108/springboot-images-new
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
