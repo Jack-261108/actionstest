@@ -41,7 +41,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_KEY }}
           script: |
             docker pull jack261108/springboot-images-new
       # 清理远程服务器环境
