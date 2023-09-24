@@ -36,5 +36,26 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
+      - name: Pull Image on Remote Server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull jack261108/springboot-images-new
+      # 清理远程服务器环境
+#      - name: Clean up the environment on Remote Server
+#        uses: appleboy/ssh-action@v0.1.4
+#        with:
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USERNAME }}
+#          key: ${{ secrets.SSH_KEY }}
+#          script: |
+#            SERVICE_NAME=${{ steps.vars.outputs.repository }}
+#            # 清理环境
+#            docker stop $SERVICE_NAME
+#            docker rm $SERVICE_NAME
+#            # 清除其他同名镜像(排除本次构建的镜像)
+#            docker images --format '{{.Repository}}:{{.Tag}}' | grep ^${{ steps.vars.outputs.image_name }}: | grep -v '${{ steps.vars.outputs.image_name }}:${{ steps.vars.outputs.sha_short }}' | xargs -r docker rmi
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
