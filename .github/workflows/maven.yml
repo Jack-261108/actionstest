@@ -21,7 +21,8 @@ jobs:
       - name: 提取标签名称
         id: github_ref
         run: |
-               echo "test=${{github.ref}}" >> "$GITHUB_OUTPUT"
+          tag=$(echo "${{ github.ref }}" | cut -d '/' -f 3)
+          echo "tag=$tag" >> $GITHUB_STATE
       - uses: actions/checkout@master
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -31,39 +32,39 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn clean install  # Assumes Maven is used for the build
-#      - name: Build & push Docker image
-#        uses: mr-smithers-excellent/docker-build-push@v6
-#        with:
-#          image: jack261108/springboot-images-new
-#          tags: latest
-#          registry: docker.io
-#          dockerfile: Dockerfile
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
-#      - name: Pull Image on Remote Server
-#        uses: appleboy/ssh-action@v0.1.4
-#        with:
-#          host: ${{ secrets.SSH_HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_KEY }}
-#          script: |
-#            docker pull jack261108/springboot-images-new
+      #      - name: Build & push Docker image
+      #        uses: mr-smithers-excellent/docker-build-push@v6
+      #        with:
+      #          image: jack261108/springboot-images-new
+      #          tags: latest
+      #          registry: docker.io
+      #          dockerfile: Dockerfile
+      #          username: ${{ secrets.DOCKER_USERNAME }}
+      #          password: ${{ secrets.DOCKER_PASSWORD }}
+      #      - name: Pull Image on Remote Server
+      #        uses: appleboy/ssh-action@v0.1.4
+      #        with:
+      #          host: ${{ secrets.SSH_HOST }}
+      #          username: ${{ secrets.SSH_USERNAME }}
+      #          password: ${{ secrets.SSH_KEY }}
+      #          script: |
+      #            docker pull jack261108/springboot-images-new
       - name: test
         run: |
-             echo "Tag is ${{ steps.github_ref.outputs.test }}"
+          echo "Tag is ${{ steps.github_ref.outputs.tag }}"
       
       # 清理远程服务器环境
-#      - name: Clean up the environment on Remote Server
-#        uses: appleboy/ssh-action@v0.1.4
-#        with:
-#          host: ${{ secrets.SSH_HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          key: ${{ secrets.SSH_KEY }}
-#          script: |
-#            SERVICE_NAME=${{ steps.vars.outputs.repository }}
-#            # 清理环境
-#            docker stop $SERVICE_NAME
-#            docker rm $SERVICE_NAME
-#            # 清除其他同名镜像(排除本次构建的镜像)
-#            docker images --format '{{.Repository}}:{{.Tag}}' | grep ^jack261108/springboot-images-new: | grep -v 'jack261108/springboot-images-new:latest' | xargs -r docker rmi
+    #      - name: Clean up the environment on Remote Server
+    #        uses: appleboy/ssh-action@v0.1.4
+    #        with:
+    #          host: ${{ secrets.SSH_HOST }}
+    #          username: ${{ secrets.SSH_USERNAME }}
+    #          key: ${{ secrets.SSH_KEY }}
+    #          script: |
+    #            SERVICE_NAME=${{ steps.vars.outputs.repository }}
+    #            # 清理环境
+    #            docker stop $SERVICE_NAME
+    #            docker rm $SERVICE_NAME
+    #            # 清除其他同名镜像(排除本次构建的镜像)
+    #            docker images --format '{{.Repository}}:{{.Tag}}' | grep ^jack261108/springboot-images-new: | grep -v 'jack261108/springboot-images-new:latest' | xargs -r docker rmi
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
