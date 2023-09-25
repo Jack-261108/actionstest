@@ -50,7 +50,7 @@ jobs:
             docker pull jack261108/springboot-images-new
       - name: test
         run: |
-             echo "Tag is ${{ steps.github_ref.outputs.tag }}"
+             echo "Tag is ${{ steps.github_ref.outputs.test }}"
       
       # 清理远程服务器环境
 #      - name: Clean up the environment on Remote Server
