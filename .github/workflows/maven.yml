@@ -21,7 +21,7 @@ jobs:
       - name: 提取标签名称
         id: github_ref
         run: |
-          tag=$(echo "${{ github.ref }}" | cut -d '/' -f 3)
+          tag=$(echo "${{ github.ref }}" | cut -d '/' -f 2)
           echo "tag=$tag" >> $GITHUB_STATE
       - uses: actions/checkout@master
       - name: Set up JDK 11
